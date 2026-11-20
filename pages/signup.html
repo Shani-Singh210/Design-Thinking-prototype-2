@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Create Account | First Fifteen Days</title>
+    <link rel="stylesheet" href="../css/style.css">
+
+    <style>
+        .login-page {
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 30px 20px;
+            box-sizing: border-box;
+            background: #FFF9F5;
+        }
+
+        .login-card {
+            width: 100%;
+            max-width: 440px;
+            background: white;
+            padding: 42px;
+            border-radius: 22px;
+            border: 1px solid #F2E4DA;
+            box-shadow: 0 12px 40px #9b73501a;
+            box-sizing: border-box;
+        }
+
+        .login-logo {
+            text-align: center;
+            font-size: 42px;
+        }
+
+        .login-card h1 {
+            text-align: center;
+            color: #594638;
+        }
+
+        .login-subtitle {
+            text-align: center;
+            color: #927966;
+            margin-bottom: 30px;
+        }
+
+        .login-card label {
+            display: block;
+            margin: 17px 0 8px;
+            font-weight: 600;
+            color: #594638;
+        }
+
+        .login-card input {
+            width: 100%;
+            padding: 14px;
+            box-sizing: border-box;
+            border: 1px solid #EBD9CA;
+            border-radius: 9px;
+            font-size: 14px;
+        }
+
+        .login-card button {
+            width: 100%;
+            margin-top: 25px;
+            padding: 15px;
+            background: #E8B99C;
+            border: none;
+            border-radius: 9px;
+            cursor: pointer;
+        }
+
+        .login-extra,
+        .login-note {
+            text-align: center;
+            color: #806B5C;
+            margin-top: 20px;
+        }
+
+        .login-extra a {
+            color: #C58D6A;
+            font-weight: bold;
+        }
+    </style>
+
+</head>
+
+<body>
+
+    <div class="login-page">
+        <div class="login-card">
+            <div class="login-logo">🎓</div>
+
+            <h1>Create Account</h1>
+            <p class="login-subtitle">Start your first fifteen days at LPU!</p>
+
+            <form onsubmit="createAccount(event)">
+                <label for="name">Full Name</label>
+                <input type="text" id="name" placeholder="Enter your name" required>
+
+                <label for="email">Student Email</label>
+                <input type="email" id="email" placeholder="Enter your email" required>
+
+                <label for="password">Create Password</label>
+                <input type="password" id="password" placeholder="Create password" minlength="6" required>
+
+                <button type="submit">Create Account →</button>
+            </form>
+
+            <p class="login-extra">
+                Already have an account?
+                <a href="login.html">Login</a>
+            </p>
+
+            <p class="login-note">
+                Demo registration only. Do not use your real password.
+            </p>
+        </div>
+    </div>
+
+    <script>
+        function createAccount(event) {
+            event.preventDefault();
+
+            const name = document.getElementById("name").value.trim();
+
+            alert("Welcome, " + name + "!");
+
+            window.location.href = "dashboard.html";
+        }
+    </script>
+
+</body>
+
+</html>

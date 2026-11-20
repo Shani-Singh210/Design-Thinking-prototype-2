@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>First Fifteen Days | LPU Navigator</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+
+<body>
+    <script>
+        window.location.replace("pages/login.html");
+    </script>
+
+    <header class="navbar">
+        <div class="brand">🎓 First Fifteen Days</div>
+        <nav>
+            <a href="index.html">Home</a>
+            <a href="pages/map.html">Campus Map</a>
+            <a href="pages/facilities.html">Facilities</a>
+            <a href="pages/help.html">Help & Contacts</a>
+        </nav>
+        <button class="nav-btn" onclick="location.href='pages/search.html'">Explore Campus</button>
+    </header>
+
+    <section class="hero">
+        <div class="hero-content">
+            <span class="tag">YOUR FIRST 15 DAYS AT LPU</span>
+            <h1>Your Campus Journey<br>Starts Here.</h1>
+            <p>New to LPU? Find classrooms, hostels, libraries and essential campus facilities with ease.</p>
+            <div class="hero-buttons">
+                <button onclick="location.href='pages/map.html'">Explore Campus Map →</button>
+                <button class="outline" onclick="location.href='pages/facilities.html'">Explore Facilities</button>
+            </div>
+        </div>
+        <div class="hero-visual">
+            <div class="visual-icon">📍</div>
+            <h3>Discover Your Campus</h3>
+            <p>Everything a fresher needs, in one place.</p>
+            <div class="visual-stats">
+                <div><b>01</b><small>Find Places</small></div>
+                <div><b>02</b><small>Get Guidance</small></div>
+                <div><b>03</b><small>Feel Confident</small></div>
+            </div>
+        </div>
+    </section>
+
+    <section class="search-section">
+        <div>
+            <h2>Where do you want to go?</h2>
+            <p>Search for important places around the LPU campus.</p>
+        </div>
+        <div class="search-box">
+            <span>⌕</span>
+            <input id="homeSearch" placeholder="Search library, hostel, hospital...">
+            <button onclick="searchCampus()">Search</button>
+        </div>
+    </section>
+
+    <section class="section">
+        <div class="section-heading">
+            <div><span class="tag">QUICK ACCESS</span>
+                <h2>Explore Your Campus</h2>
+            </div>
+            <a href="pages/facilities.html">View all →</a>
+        </div>
+        <div class="cards">
+            <a class="card" href="pages/map.html">
+                <div class="card-icon">🗺️</div>
+                <h3>Campus Map</h3>
+                <p>Explore important campus locations.</p>
+            </a>
+            <a class="card" href="pages/search.html">
+                <div class="card-icon">🔎</div>
+                <h3>Find Locations</h3>
+                <p>Search for buildings and facilities.</p>
+            </a>
+            <a class="card" href="pages/facilities.html">
+                <div class="card-icon">🏫</div>
+                <h3>Facilities</h3>
+                <p>Discover student facilities.</p>
+            </a>
+            <a class="card" href="pages/help.html">
+                <div class="card-icon">🤝</div>
+                <h3>Help & Support</h3>
+                <p>Find useful contacts and guidance.</p>
+            </a>
+        </div>
+    </section>
+
+    <section class="welcome-strip">
+        <div>
+            <h2>Every fresher deserves a confident start.</h2>
+            <p>Make your first fifteen days easier with the right campus information.</p>
+        </div>
+        <button onclick="location.href='pages/help.html'">Get Help →</button>
+    </section>
+
+    <footer>
+        <b>First Fifteen Days</b>
+        <p>An independent student project – LPU Fresher Navigator</p>
+        <span>Helping freshers navigate campus with confidence.</span>
+    </footer>
+
+    <script src="javascript/script.js"></script>
+</body>
+
+</html>

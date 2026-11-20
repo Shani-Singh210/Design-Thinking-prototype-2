@@ -1,0 +1,519 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Campus Explorer | First Fifteen Days</title>
+    <link rel="stylesheet" href="../css/style.css">
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Arial, sans-serif;
+            background: #FFF9F5;
+            color: #594638;
+        }
+
+        /* NAVBAR */
+        .navbar {
+            background: white;
+            padding: 19px 7%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid #F2E4DA;
+        }
+
+        .logo {
+            font-size: 23px;
+            font-weight: 800;
+            color: #594638;
+        }
+
+        .logo span {
+            color: #C58D6A;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 28px;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: #806B5C;
+            font-size: 14px;
+            font-weight: 600;
+        }
+
+        .nav-links a:hover,
+        .nav-links a.active {
+            color: #C58D6A;
+        }
+
+        /* PAGE */
+        .container {
+            max-width: 1250px;
+            margin: auto;
+            padding: 48px 7%;
+        }
+
+        /* HERO */
+        .hero {
+            background: linear-gradient(120deg, #FCE9DC, #F9D9C5);
+            padding: 42px;
+            border-radius: 23px;
+            margin-bottom: 35px;
+        }
+
+        .eyebrow {
+            color: #B77D5D;
+            font-size: 12px;
+            font-weight: 800;
+            letter-spacing: 2px;
+            margin-bottom: 15px;
+        }
+
+        .hero h1 {
+            font-size: 35px;
+            margin-bottom: 12px;
+        }
+
+        .hero p {
+            color: #806B5C;
+            line-height: 1.7;
+        }
+
+        /* SEARCH */
+        .search-section {
+            background: white;
+            padding: 25px;
+            border-radius: 18px;
+            border: 1px solid #F2E4DA;
+            box-shadow: 0 8px 25px #9b73500d;
+            margin-top: -5px;
+            margin-bottom: 35px;
+        }
+
+        .search-section h2 {
+            font-size: 19px;
+            margin-bottom: 16px;
+        }
+
+        .search-box {
+            display: flex;
+            gap: 12px;
+        }
+
+        .search-box input {
+            flex: 1;
+            min-width: 0;
+            padding: 16px;
+            border: 1px solid #EBD9CA;
+            border-radius: 11px;
+            font-size: 14px;
+            outline: none;
+        }
+
+        .search-box input:focus {
+            border-color: #D9A887;
+            box-shadow: 0 0 0 3px #FCE9DC;
+        }
+
+        .search-box button {
+            padding: 0 27px;
+            background: #DDAA8A;
+            border: none;
+            border-radius: 11px;
+            color: #594638;
+            font-weight: 700;
+            cursor: pointer;
+        }
+
+        /* CATEGORIES */
+        .section-title {
+            font-size: 23px;
+            margin-bottom: 7px;
+        }
+
+        .section-subtitle {
+            color: #927966;
+            font-size: 13px;
+            margin-bottom: 20px;
+        }
+
+        .categories {
+            display: flex;
+            gap: 12px;
+            flex-wrap: wrap;
+            margin-bottom: 38px;
+        }
+
+        .category {
+            border: 1px solid #EBD9CA;
+            background: white;
+            color: #806B5C;
+            padding: 11px 19px;
+            border-radius: 30px;
+            cursor: pointer;
+            font-size: 13px;
+            font-weight: 600;
+            transition: .2s;
+        }
+
+        .category:hover,
+        .category.active {
+            background: #E8B99C;
+            color: #594638;
+            border-color: #E8B99C;
+        }
+
+        /* LOCATION CARDS */
+        .location-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 20px;
+        }
+
+        .location-card {
+            background: white;
+            border: 1px solid #F1E3D9;
+            border-radius: 18px;
+            padding: 24px;
+            transition: .25s;
+        }
+
+        .location-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 12px 28px #9b73501a;
+            border-color: #E8B99C;
+        }
+
+        .location-icon {
+            width: 55px;
+            height: 55px;
+            display: grid;
+            place-items: center;
+            background: #FFF0E6;
+            border-radius: 15px;
+            font-size: 27px;
+            margin-bottom: 18px;
+        }
+
+        .location-card h3 {
+            font-size: 18px;
+            margin-bottom: 9px;
+        }
+
+        .location-card p {
+            color: #927966;
+            font-size: 13px;
+            line-height: 1.6;
+            min-height: 42px;
+        }
+
+        .location-card a {
+            display: inline-block;
+            margin-top: 17px;
+            color: #B77D5D;
+            font-size: 13px;
+            font-weight: 700;
+            text-decoration: none;
+        }
+
+        .location-card a:hover {
+            color: #8F5D40;
+        }
+
+        .no-results {
+            display: none;
+            text-align: center;
+            padding: 35px;
+            background: white;
+            border-radius: 15px;
+            color: #927966;
+            margin-top: 15px;
+        }
+
+        .bottom-help {
+            margin-top: 40px;
+            background: #FCE9DC;
+            border-radius: 18px;
+            padding: 27px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .bottom-help p {
+            color: #806B5C;
+            font-size: 13px;
+            margin-top: 7px;
+        }
+
+        .bottom-help a {
+            background: #DDAA8A;
+            padding: 12px 20px;
+            border-radius: 10px;
+            color: #594638;
+            font-weight: 700;
+            text-decoration: none;
+            white-space: nowrap;
+        }
+
+        footer {
+            text-align: center;
+            padding: 25px;
+            color: #A18B7B;
+            font-size: 12px;
+        }
+
+        @media(max-width: 850px) {
+            .location-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media(max-width: 600px) {
+            .navbar {
+                flex-direction: column;
+                gap: 18px;
+            }
+
+            .nav-links {
+                gap: 14px;
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+
+            .container {
+                padding: 30px 5%;
+            }
+
+            .hero {
+                padding: 28px;
+            }
+
+            .hero h1 {
+                font-size: 27px;
+            }
+
+            .search-box {
+                flex-direction: column;
+            }
+
+            .search-box button {
+                padding: 14px;
+            }
+
+            .location-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .bottom-help {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+        }
+
+        .hero {
+            background: linear-gradient(120deg, #FCE9DC, #F9D9C5);
+            padding: 42px;
+            border-radius: 23px;
+            margin-bottom: 35px;
+        }
+
+        /* FINAL HERO BOX SIZE FIX */
+        .hero {
+            width: 100% !important;
+            max-width: 900px !important;
+            min-height: 0 !important;
+            height: 190px !important;
+            padding: 25px 35px !important;
+            margin: 20px auto 25px !important;
+            border-radius: 20px !important;
+            display: flex !important;
+            flex-direction: row !important;
+            align-items: center !important;
+            justify-content: space-between !important;
+            gap: 20px !important;
+        }
+
+        @media (max-width: 600px) {
+            .hero {
+                height: auto !important;
+                min-height: 160px !important;
+                flex-direction: column !important;
+                align-items: flex-start !important;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <header class="navbar">
+        <div class="logo">🎓 First Fifteen <span>Days</span></div>
+
+        <nav class="nav-links">
+            <a href="dashboard.html">Home</a>
+            <a href="search.html" class="active">Search</a>
+            <a href="map.html">Campus Map</a>
+            <a href="facilities.html">Facilities</a>
+            <a href="help.html">Help & Contacts</a>
+        </nav>
+    </header>
+
+    <main class="container">
+
+        <section class="hero">
+            <div class="eyebrow">CAMPUS EXPLORER</div>
+            <h1>Find Your Way Around LPU 📍</h1>
+            <p>
+                New to campus? Don't worry! Search for important places,
+                explore facilities and make your first fifteen days easier.
+            </p>
+        </section>
+
+        <section class="search-section">
+            <h2>🔎 What are you looking for?</h2>
+
+            <div class="search-box">
+                <input type="text" id="searchInput" placeholder="Try Library, Hostel, Hospital, Food Court..."
+                    oninput="filterLocations()">
+                <button onclick="filterLocations()">Search →</button>
+            </div>
+        </section>
+
+        <section>
+            <h2 class="section-title">Browse Categories</h2>
+            <p class="section-subtitle">Choose a category to find what you need.</p>
+
+            <div class="categories">
+                <button class="category active" onclick="filterCategory('all', this)">All Places</button>
+                <button class="category" onclick="filterCategory('academic', this)">📚 Academic</button>
+                <button class="category" onclick="filterCategory('residential', this)">🏠 Residential</button>
+                <button class="category" onclick="filterCategory('food', this)">🍽️ Food</button>
+                <button class="category" onclick="filterCategory('health', this)">🏥 Health</button>
+                <button class="category" onclick="filterCategory('other', this)">⭐ Other</button>
+            </div>
+        </section>
+
+        <section>
+            <h2 class="section-title">Popular Campus Locations</h2>
+            <p class="section-subtitle">Explore places that every fresher should know.</p>
+
+            <div class="location-grid" id="locationGrid">
+
+                <div class="location-card" data-category="academic">
+                    <div class="location-icon">📚</div>
+                    <h3>University Library</h3>
+                    <p>Find a place for reading, studying and accessing learning resources.</p>
+                    <a href="map.html">Explore on Map →</a>
+                </div>
+
+                <div class="location-card" data-category="residential">
+                    <div class="location-icon">🏠</div>
+                    <h3>Hostel</h3>
+                    <p>Find your residential area and explore hostel-related facilities.</p>
+                    <a href="map.html">Explore on Map →</a>
+                </div>
+
+                <div class="location-card" data-category="health">
+                    <div class="location-icon">🏥</div>
+                    <h3>Medical Centre</h3>
+                    <p>Find information about medical support and healthcare facilities.</p>
+                    <a href="map.html">Explore on Map →</a>
+                </div>
+
+                <div class="location-card" data-category="food">
+                    <div class="location-icon">🍽️</div>
+                    <h3>Food Court</h3>
+                    <p>Explore food and refreshment options available around campus.</p>
+                    <a href="map.html">Explore on Map →</a>
+                </div>
+
+                <div class="location-card" data-category="academic">
+                    <div class="location-icon">🏫</div>
+                    <h3>Academic Blocks</h3>
+                    <p>Find academic buildings and get familiar with your learning spaces.</p>
+                    <a href="map.html">Explore on Map →</a>
+                </div>
+
+                <div class="location-card" data-category="other">
+                    <div class="location-icon">🛍️</div>
+                    <h3>Shopping & Essentials</h3>
+                    <p>Discover useful everyday shopping and student essentials.</p>
+                    <a href="map.html">Explore on Map →</a>
+                </div>
+
+            </div>
+
+            <div class="no-results" id="noResults">
+                <h3>No locations found!</h3>
+                <p>Try another search term or choose a different category.</p>
+            </div>
+        </section>
+
+        <section class="bottom-help">
+            <div>
+                <h3>Can't find what you're looking for? 💬</h3>
+                <p>Visit our help section for additional student support.</p>
+            </div>
+            <a href="help.html">Get Help →</a>
+        </section>
+
+    </main>
+
+    <footer>
+        First Fifteen Days · Campus Navigation Prototype for LPU Freshers
+    </footer>
+
+    <script>
+        let selectedCategory = "all";
+
+        function filterLocations() {
+            const query = document.getElementById("searchInput")
+                .value.toLowerCase().trim();
+
+            const cards = document.querySelectorAll(".location-card");
+            let visibleCount = 0;
+
+            cards.forEach(card => {
+                const matchesText = card.innerText.toLowerCase().includes(query);
+                const matchesCategory =
+                    selectedCategory === "all" ||
+                    card.dataset.category === selectedCategory;
+
+                const show = matchesText && matchesCategory;
+                card.style.display = show ? "block" : "none";
+
+                if (show) visibleCount++;
+            });
+
+            document.getElementById("noResults").style.display =
+                visibleCount === 0 ? "block" : "none";
+        }
+
+        function filterCategory(category, button) {
+            selectedCategory = category;
+
+            document.querySelectorAll(".category").forEach(btn => {
+                btn.classList.remove("active");
+            });
+
+            button.classList.add("active");
+            filterLocations();
+        }
+    </script>
+
+</body>
+
+</html>

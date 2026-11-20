@@ -1,0 +1,1011 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Smart Campus Navigator | First Fifteen Days</title>
+
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
+
+    <style>
+        :root {
+            --bg: #fff9f5;
+            --ink: #49392f;
+            --muted: #8a776a;
+            --line: #efdfd4;
+            --accent: #c88762;
+            --soft: #fbefe7;
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            background: var(--bg);
+            color: var(--ink);
+            font-family: Segoe UI, Arial, sans-serif;
+        }
+
+        .topbar {
+            min-height: 66px;
+            background: white;
+            border-bottom: 1px solid var(--line);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 12px 24px;
+            gap: 15px;
+        }
+
+        .brand {
+            font-size: 20px;
+            font-weight: 800;
+        }
+
+        .brand span {
+            color: var(--accent);
+        }
+
+        .top-actions {
+            display: flex;
+            align-items: center;
+            gap: 9px;
+        }
+
+        .top-actions a,
+        .top-actions button {
+            text-decoration: none;
+            color: var(--ink);
+            background: white;
+            border: 1px solid var(--line);
+            padding: 9px 12px;
+            border-radius: 9px;
+            font-weight: 650;
+            cursor: pointer;
+        }
+
+        .app {
+            display: grid;
+            grid-template-columns: 390px minmax(0, 1fr);
+            height: calc(100vh - 66px);
+            min-height: 650px;
+        }
+
+        .sidebar {
+            background: white;
+            border-right: 1px solid var(--line);
+            display: flex;
+            flex-direction: column;
+            min-height: 0;
+            z-index: 500;
+        }
+
+        .side-head {
+            padding: 20px;
+            border-bottom: 1px solid var(--line);
+        }
+
+        .eyebrow {
+            color: #b86d42;
+            font-size: 10px;
+            letter-spacing: 1.8px;
+            font-weight: 800;
+        }
+
+        h1 {
+            font-size: 22px;
+            margin: 8px 0;
+        }
+
+        .sub {
+            font-size: 12px;
+            color: var(--muted);
+            line-height: 1.5;
+            margin: 0;
+        }
+
+        .planner {
+            padding: 15px 19px;
+            border-bottom: 1px solid var(--line);
+        }
+
+        .field-wrap {
+            margin-bottom: 13px;
+        }
+
+        .field-label {
+            display: block;
+            font-size: 10px;
+            letter-spacing: 1px;
+            font-weight: 800;
+            color: var(--muted);
+            margin-bottom: 7px;
+        }
+
+        .field {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #e9ddd5;
+            border-radius: 10px;
+            background: #fffdfa;
+            font-size: 13px;
+            color: var(--ink);
+            outline: none;
+        }
+
+        .field:focus {
+            border-color: var(--accent);
+        }
+
+        .location-row {
+            display: flex;
+            gap: 8px;
+        }
+
+        .small-btn {
+            border: 1px solid var(--line);
+            background: var(--soft);
+            border-radius: 9px;
+            padding: 0 12px;
+            cursor: pointer;
+            font-weight: 700;
+        }
+
+        .primary {
+            width: 100%;
+            background: #e97832;
+            color: white;
+            border: 0;
+            padding: 13px;
+            border-radius: 10px;
+            font-size: 14px;
+            font-weight: 800;
+            cursor: pointer;
+        }
+
+        .secondary-row {
+            display: flex;
+            gap: 8px;
+            margin-top: 9px;
+        }
+
+        .secondary {
+            flex: 1;
+            padding: 10px;
+            border: 1px solid var(--line);
+            background: white;
+            border-radius: 9px;
+            cursor: pointer;
+            font-weight: 650;
+            color: var(--ink);
+        }
+
+        .status {
+            font-size: 11px;
+            color: var(--muted);
+            line-height: 1.5;
+            margin: 10px 0 0;
+        }
+
+        .notice {
+            background: #fff7e8;
+            border: 1px solid #f1dfb6;
+            padding: 9px;
+            border-radius: 9px;
+            color: #79613a;
+            font-size: 10px;
+            line-height: 1.5;
+            margin-top: 10px;
+        }
+
+        .filters {
+            display: flex;
+            gap: 7px;
+            overflow-x: auto;
+            padding: 12px 15px;
+            border-bottom: 1px solid var(--line);
+        }
+
+        .chip {
+            white-space: nowrap;
+            padding: 7px 12px;
+            border: 1px solid #eadfd8;
+            border-radius: 20px;
+            background: white;
+            color: #78695f;
+            font-size: 11px;
+            font-weight: 700;
+            cursor: pointer;
+        }
+
+        .chip.active {
+            background: #e97832;
+            color: white;
+            border-color: #e97832;
+        }
+
+        .results-head {
+            display: flex;
+            justify-content: space-between;
+            padding: 13px 19px 7px;
+            font-size: 13px;
+        }
+
+        .results-head span {
+            font-size: 11px;
+            color: var(--muted);
+        }
+
+        .results {
+            padding: 0 12px 18px;
+            overflow: auto;
+        }
+
+        .place {
+            border: 1px solid var(--line);
+            border-radius: 12px;
+            padding: 12px;
+            margin: 7px 6px;
+            background: white;
+            cursor: pointer;
+        }
+
+        .place:hover,
+        .place.selected {
+            border-color: #d9a17e;
+            background: #fffaf6;
+        }
+
+        .place-top {
+            display: flex;
+            align-items: center;
+            gap: 9px;
+        }
+
+        .place-icon {
+            width: 34px;
+            height: 34px;
+            border-radius: 10px;
+            background: #fff0e6;
+            display: grid;
+            place-items: center;
+            font-size: 18px;
+        }
+
+        .place-name {
+            font-size: 13px;
+            font-weight: 800;
+            flex: 1;
+        }
+
+        .tag {
+            font-size: 9px;
+            font-weight: 800;
+            padding: 4px 6px;
+            border-radius: 6px;
+            background: #f4eee9;
+        }
+
+        .place p {
+            font-size: 11px;
+            color: var(--muted);
+            line-height: 1.45;
+            margin: 7px 0 0 43px;
+        }
+
+        .map-area {
+            position: relative;
+            min-width: 0;
+            background: #e8eee8;
+        }
+
+        #campusMap {
+            width: 100%;
+            height: 100%;
+            min-height: 650px;
+        }
+
+        .map-overlay {
+            position: absolute;
+            top: 15px;
+            left: 15px;
+            right: 15px;
+            z-index: 450;
+            display: flex;
+            justify-content: space-between;
+            gap: 10px;
+            pointer-events: none;
+        }
+
+        .map-pill,
+        .map-tools button,
+        .map-legend {
+            background: white;
+            border: 1px solid var(--line);
+            border-radius: 10px;
+            padding: 10px 12px;
+            box-shadow: 0 5px 20px #00000010;
+            font-size: 11px;
+            font-weight: 700;
+        }
+
+        .map-tools {
+            display: flex;
+            gap: 7px;
+            pointer-events: auto;
+        }
+
+        .map-tools button {
+            cursor: pointer;
+        }
+
+        .map-legend {
+            position: absolute;
+            bottom: 18px;
+            left: 15px;
+            z-index: 450;
+            line-height: 1.8;
+            color: var(--muted);
+        }
+
+        .dot {
+            display: inline-block;
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            margin-right: 5px;
+        }
+
+        body.dark {
+            --bg: #17212b;
+            --ink: #e9edf2;
+            --muted: #aeb9c4;
+            --line: #354553;
+            --soft: #2b3945;
+        }
+
+        body.dark .topbar,
+        body.dark .sidebar,
+        body.dark .place,
+        body.dark .field,
+        body.dark .map-pill,
+        body.dark .map-tools button,
+        body.dark .map-legend,
+        body.dark .secondary {
+            background: #202d39;
+            color: #e9edf2;
+            border-color: #354553;
+        }
+
+        body.dark .chip {
+            background: #202d39;
+            color: #e9edf2;
+        }
+
+        body.dark .chip.active {
+            background: #e97832;
+            color: white;
+        }
+
+        @media(max-width:900px) {
+            .app {
+                grid-template-columns: 340px 1fr;
+            }
+        }
+
+        @media(max-width:700px) {
+            .topbar {
+                flex-wrap: wrap;
+            }
+
+            .top-actions a {
+                display: none;
+            }
+
+            .app {
+                display: flex;
+                flex-direction: column;
+                height: auto;
+            }
+
+            .map-area {
+                order: 1;
+                height: 50vh;
+                min-height: 360px;
+            }
+
+            #campusMap {
+                min-height: 360px;
+            }
+
+            .sidebar {
+                order: 2;
+            }
+        }
+
+        /* ==================================
+   PREMIUM SIDEBAR REDESIGN
+================================== */
+
+        .sidebar {
+            background: #FFFCFA;
+            border-right: 1px solid #F0E2D8;
+            box-shadow: 5px 0 22px rgba(91, 60, 39, 0.045);
+        }
+
+        .side-head {
+            padding: 25px 22px 21px;
+            background: linear-gradient(145deg, #FFF9F5, #FCEDE3);
+            border-bottom: 1px solid #F1E3D9;
+        }
+
+        .eyebrow {
+            display: inline-block;
+            background: #F8E4D6;
+            color: #B56F48;
+            padding: 6px 10px;
+            border-radius: 20px;
+            font-size: 9px;
+            letter-spacing: 1.4px;
+        }
+
+        .side-head h1 {
+            font-size: 23px;
+            line-height: 1.3;
+            color: #49392F;
+            margin: 13px 0 7px;
+        }
+
+        .side-head .sub {
+            font-size: 12px;
+            color: #907B6D;
+            line-height: 1.7;
+        }
+
+        /* ROUTE PLANNER */
+
+        .planner {
+            padding: 20px 19px;
+            background: white;
+            border-bottom: 1px solid #F0E3DB;
+        }
+
+        .field-wrap {
+            margin-bottom: 17px;
+        }
+
+        .field-label {
+            color: #806B5C;
+            font-size: 10px;
+            letter-spacing: 1.1px;
+            font-weight: 800;
+            margin-bottom: 9px;
+        }
+
+        .field {
+            min-height: 45px;
+            border: 1px solid #EADBD0;
+            border-radius: 12px;
+            padding: 12px 14px;
+            background: #FFFCFA;
+            color: #594638;
+            font-size: 13px;
+            transition: .2s;
+        }
+
+        .field:hover {
+            border-color: #DDB69C;
+        }
+
+        .field:focus {
+            border-color: #CD906C;
+            box-shadow: 0 0 0 3px rgba(205, 144, 108, .12);
+            background: white;
+        }
+
+        .location-row {
+            gap: 9px;
+        }
+
+        .small-btn {
+            background: #FFF0E6;
+            color: #A86642;
+            border: 1px solid #F0D8C8;
+            border-radius: 11px;
+            font-size: 12px;
+            transition: .2s;
+        }
+
+        .small-btn:hover {
+            background: #F8E0D0;
+        }
+
+        /* NAVIGATE BUTTON */
+
+        .primary {
+            min-height: 47px;
+            background: linear-gradient(110deg, #E97832, #D96827);
+            border-radius: 12px;
+            font-size: 13px;
+            letter-spacing: .2px;
+            box-shadow: 0 5px 13px rgba(217, 104, 39, .18);
+            transition: .2s;
+        }
+
+        .primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 17px rgba(217, 104, 39, .23);
+        }
+
+        .secondary-row {
+            gap: 10px;
+            margin-top: 11px;
+        }
+
+        .secondary {
+            min-height: 40px;
+            background: #FFFAF7;
+            border: 1px solid #EEDFD4;
+            border-radius: 10px;
+            color: #715746;
+            font-size: 12px;
+            transition: .2s;
+        }
+
+        .secondary:hover {
+            background: #FCEDE3;
+            border-color: #DDB69C;
+        }
+
+        /* STATUS AND NOTE */
+
+        .status {
+            background: #F8F5F1;
+            border-radius: 9px;
+            padding: 9px 10px;
+            color: #816D5F;
+            font-size: 10px;
+            line-height: 1.6;
+        }
+
+        .notice {
+            background: #FFF8EB;
+            border: 1px solid #F0E0BD;
+            border-radius: 10px;
+            color: #80663D;
+            padding: 11px;
+            font-size: 10px;
+            line-height: 1.6;
+        }
+
+        /* CATEGORY FILTERS */
+
+        .filters {
+            padding: 15px 15px;
+            gap: 8px;
+            background: #FFFCFA;
+            border-bottom: 1px solid #F0E3DB;
+            scrollbar-width: thin;
+            scrollbar-color: #D8B49C transparent;
+        }
+
+        .chip {
+            background: white;
+            border: 1px solid #EADFD8;
+            color: #806B5C;
+            padding: 8px 13px;
+            border-radius: 20px;
+            font-size: 10px;
+            transition: .2s;
+        }
+
+        .chip:hover {
+            background: #FFF0E6;
+            border-color: #E4B99C;
+            color: #A86642;
+        }
+
+        .chip.active {
+            background: #E97832;
+            border-color: #E97832;
+            color: white;
+            box-shadow: 0 3px 9px rgba(217, 104, 39, .16);
+        }
+
+        /* DIRECTORY HEADER */
+
+        .results-head {
+            padding: 17px 19px 10px;
+            background: #FFFCFA;
+            align-items: center;
+        }
+
+        .results-head strong {
+            font-size: 13px;
+            color: #49392F;
+        }
+
+        .results-head span {
+            background: #F8EAE0;
+            color: #A66B49;
+            padding: 5px 9px;
+            border-radius: 20px;
+            font-size: 10px;
+            font-weight: 700;
+        }
+
+        /* LOCATION CARDS */
+
+        .results {
+            padding: 0 13px 18px;
+            background: #FFFCFA;
+            scrollbar-width: thin;
+            scrollbar-color: #D8B49C transparent;
+        }
+
+        .place {
+            padding: 13px;
+            margin: 8px 3px;
+            border: 1px solid #EFE3DA;
+            border-radius: 13px;
+            background: white;
+            box-shadow: 0 2px 8px rgba(91, 60, 39, .025);
+            transition: .2s;
+        }
+
+        .place:hover {
+            transform: translateY(-2px);
+            border-color: #DDB18F;
+            box-shadow: 0 6px 15px rgba(91, 60, 39, .07);
+            background: #FFFAF6;
+        }
+
+        .place.selected {
+            border: 1px solid #D99B76;
+            background: #FFF4EC;
+        }
+
+        .place-icon {
+            width: 38px;
+            height: 38px;
+            border-radius: 11px;
+            background: #FFF0E6;
+            font-size: 19px;
+        }
+
+        .place-name {
+            color: #49392F;
+            font-size: 12px;
+            line-height: 1.4;
+        }
+
+        .tag {
+            background: #F8EAE0;
+            color: #A66B49;
+            border-radius: 6px;
+            font-size: 8px;
+            padding: 5px 7px;
+        }
+
+        .place p {
+            color: #907B6D;
+            font-size: 10px;
+            line-height: 1.6;
+            margin-top: 9px;
+        }
+
+        /* DARK MODE SIDEBAR */
+
+        body.dark .side-head {
+            background: linear-gradient(145deg, #24313D, #202D39);
+        }
+
+        body.dark .eyebrow,
+        body.dark .results-head strong,
+        body.dark .place-name {
+            color: #F0D5C2;
+        }
+
+        body.dark .planner,
+        body.dark .filters,
+        body.dark .results,
+        body.dark .results-head {
+            background: #202D39;
+        }
+
+        body.dark .field,
+        body.dark .secondary,
+        body.dark .place {
+            background: #263643;
+            color: #E9EDF2;
+            border-color: #394B59;
+        }
+
+        body.dark .place p {
+            color: #B2BEC8;
+        }
+
+        body.dark .place.selected {
+            background: #39404A;
+            border-color: #C88762;
+        }
+
+        body.dark .status {
+            background: #2B3945;
+            color: #C5CED7;
+        }
+
+        body.dark .notice {
+            background: #39372F;
+            color: #E7D5AE;
+            border-color: #62543A;
+        }
+
+        /* MOBILE SIDEBAR */
+
+        @media(max-width:700px) {
+            .side-head {
+                padding: 21px 18px;
+            }
+
+            .planner {
+                padding: 18px;
+            }
+
+            .filters {
+                padding: 13px 12px;
+            }
+
+            .results {
+                max-height: 480px;
+            }
+
+            .place {
+                padding: 14px;
+            }
+        }
+
+        /* FIX: FULL SIDEBAR SCROLLING */
+
+        .sidebar {
+            display: block !important;
+            height: 100%;
+            min-height: 0;
+            overflow-y: auto !important;
+            overflow-x: hidden;
+            scrollbar-width: thin;
+            scrollbar-color: #D8B49C #FFF9F5;
+            scroll-behavior: smooth;
+        }
+
+        /* Keep all sidebar sections in normal document flow */
+        .side-head,
+        .planner,
+        .filters,
+        .results-head,
+        .results {
+            flex: none !important;
+            width: 100%;
+        }
+
+        /* Remove separate scrolling from directory */
+        .results {
+            overflow: visible !important;
+            max-height: none !important;
+        }
+
+        /* Better scrollbar in Chrome */
+        .sidebar::-webkit-scrollbar {
+            width: 7px;
+        }
+
+        .sidebar::-webkit-scrollbar-track {
+            background: #FFF9F5;
+        }
+
+        .sidebar::-webkit-scrollbar-thumb {
+            background: #D8B49C;
+            border-radius: 10px;
+        }
+
+        .sidebar::-webkit-scrollbar-thumb:hover {
+            background: #C58D6A;
+        }
+
+        /* Mobile */
+        @media(max-width:700px) {
+            .sidebar {
+                height: auto;
+                max-height: none;
+                overflow-y: visible !important;
+            }
+        }
+
+        /* FIX: FULL SIDEBAR SCROLLING */
+
+        .sidebar {
+            display: block !important;
+            height: 100%;
+            min-height: 0;
+            overflow-y: auto !important;
+            overflow-x: hidden;
+            scrollbar-width: thin;
+            scrollbar-color: #D8B49C #FFF9F5;
+            scroll-behavior: smooth;
+        }
+
+        /* Keep all sidebar sections in normal document flow */
+        .side-head,
+        .planner,
+        .filters,
+        .results-head,
+        .results {
+            flex: none !important;
+            width: 100%;
+        }
+
+        /* Remove separate scrolling from directory */
+        .results {
+            overflow: visible !important;
+            max-height: none !important;
+        }
+
+        /* Better scrollbar in Chrome */
+        .sidebar::-webkit-scrollbar {
+            width: 7px;
+        }
+
+        .sidebar::-webkit-scrollbar-track {
+            background: #FFF9F5;
+        }
+
+        .sidebar::-webkit-scrollbar-thumb {
+            background: #D8B49C;
+            border-radius: 10px;
+        }
+
+        .sidebar::-webkit-scrollbar-thumb:hover {
+            background: #C58D6A;
+        }
+
+        /* Mobile */
+        @media(max-width:700px) {
+            .sidebar {
+                height: auto;
+                max-height: none;
+                overflow-y: visible !important;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <header class="topbar">
+        <div class="brand">
+            🎓 First Fifteen <span>Days</span>
+            <small style="font-size:11px;color:#9a8577"> / Smart Campus Navigator</small>
+        </div>
+
+        <div class="top-actions">
+            <a href="dashboard.html">Home</a>
+            <a href="search.html">Search</a>
+            <a href="facilities.html">Facilities</a>
+            <a href="help.html">Help</a>
+            <button id="themeBtn">🌙 Night Mode</button>
+        </div>
+    </header>
+
+    <main class="app">
+
+        <aside class="sidebar">
+
+            <section class="side-head">
+                <div class="eyebrow">LPU CAMPUS GUIDE</div>
+                <h1>Find your way around</h1>
+                <p class="sub">Search a block, room, facility or campus service.</p>
+            </section>
+
+            <section class="planner">
+
+                <div class="field-wrap">
+                    <label class="field-label">YOUR CURRENT LOCATION</label>
+
+                    <div class="location-row">
+                        <input class="field" id="origin" list="originPlaces"
+                            placeholder="Enter or choose your starting point">
+                        <datalist id="originPlaces">
+                            <option value="Main Gate (Gate 1)">
+                            <option value="Block 34">
+                            <option value="Central Library (Block 37)">
+                            <option value="Uni-Mall (Block 15)">
+                            <option value="Boys Hostel">
+                            <option value="Girls Hostel">
+                            <option value="Central Food Court">
+                        </datalist>
+                        <button class="small-btn" id="locateBtn" type="button">📍 GPS</button>
+                    </div>
+
+                    <button class="secondary" id="pickOriginBtn" type="button" style="width:100%;margin-top:9px">
+                        📌 Choose Starting Point on Map
+                    </button>
+
+                </div>
+
+                <div class="field-wrap">
+                    <label class="field-label" for="destinationSearch">WHERE DO YOU WANT TO GO?</label>
+                    <input class="field" id="destinationSearch" list="campusPlaces"
+                        placeholder="Search Library, Block 37, Uni-Mall...">
+                    <datalist id="campusPlaces"></datalist>
+                </div>
+
+                <button class="primary" id="navigateBtn">➤ Get Walking Directions</button>
+
+                <div class="secondary-row">
+                    <button class="secondary" id="setBlockBtn">＋ Set My Block</button>
+                    <button class="secondary" id="clearBtn">Clear</button>
+                </div>
+
+                <p class="status" id="status" aria-live="polite">
+                    Allow location access to use your current position.
+                </p>
+
+                <div class="notice">
+                    Building names are searchable. Exact building pins and campus walking paths
+                    must be verified before in-map navigation can be trusted.
+                </div>
+
+            </section>
+
+            <nav class="filters" id="filters">
+                <button class="chip active" data-category="All">All</button>
+                <button class="chip" data-category="Academic">Academic</button>
+                <button class="chip" data-category="Library">Library</button>
+                <button class="chip" data-category="Labs">Labs</button>
+                <button class="chip" data-category="Hostels">Hostels</button>
+                <button class="chip" data-category="Food">Food</button>
+                <button class="chip" data-category="Medical">Medical</button>
+                <button class="chip" data-category="Sports">Sports</button>
+                <button class="chip" data-category="Admin">Admin</button>
+            </nav>
+
+            <div class="results-head">
+                <strong>Campus Directory</strong>
+                <span id="resultCount"></span>
+            </div>
+
+            <section class="results" id="placeResults"></section>
+
+        </aside>
+
+        <section class="map-area">
+
+            <div class="map-overlay">
+                <div class="map-pill">🗺️ LPU Campus Area · OpenStreetMap</div>
+
+                <div class="map-tools">
+                    <button id="nearbyBtn">◎ Nearby</button>
+                    <button id="fullscreenBtn">⛶ Fullscreen</button>
+                </div>
+            </div>
+
+            <div id="campusMap"></div>
+
+            <div class="map-legend">
+                <div><span class="dot" style="background:#2878d0"></span>Your GPS position</div>
+                <div><span class="dot" style="background:#e97832"></span>Selected destination</div>
+            </div>
+
+        </section>
+
+    </main>
+
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <script src="../javascript/map.js"></script>
+
+</body>
+
+</html>
